@@ -1,81 +1,74 @@
+// App.js
+import 'react-native-gesture-handler';
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { View, Text, StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
-export default function App() {
-  const fechasMarcadas = {
-    '2025-05-15': {
-      customStyles: {
-        container: { backgroundColor: '#ffcccc', borderRadius: 4 },
-        text: { color: 'red', fontWeight: 'bold' },
-      },
-      etiqueta: 'AFIP',
-    },
-    '2025-05-20': {
-      customStyles: {
-        container: { backgroundColor: '#ffcccc', borderRadius: 4 },
-        text: { color: 'red', fontWeight: 'bold' },
-      },
-      etiqueta: 'ARBA',
-    },
-  };
+const Drawer = createDrawerNavigator();
 
+function HomeScreen() {
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Calendario de vencimientos</Text>
       <Calendar
-        markingType={'custom'}
-        markedDates={fechasMarcadas}
-        dayComponent={({ date, state, marking }) => {
-          const isMarked = marking && marking.customStyles;
-          return (
-            <View
-              style={[
-                styles.dayContainer,
-                isMarked ? marking.customStyles.container : null,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.dayText,
-                  isMarked ? marking.customStyles.text : null,
-                  state === 'disabled' && styles.disabledText,
-                ]}
-              >
-                {date.day}
-              </Text>
-              {marking && marking.etiqueta && (
-                <Text style={styles.label}>{marking.etiqueta}</Text>
-              )}
-            </View>
-          );
+        style={{ marginTop: 20 }}
+        onDayPress={(day) => {
+          console.log('Día seleccionado', day);
         }}
       />
     </View>
   );
 }
 
+function IngresosScreen() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Pantalla de Ingresos</Text>
+    </View>
+  );
+}
+
+function SueldosScreen() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Pantalla de Sueldos</Text>
+    </View>
+  );
+}
+
+function InversionesScreen() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Pantalla de Inversiones</Text>
+    </View>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Drawer.Navigator initialRouteName="Inicio">
+        <Drawer.Screen name="Inicio" component={HomeScreen} />
+        <Drawer.Screen name="Ingresos" component={IngresosScreen} />
+        <Drawer.Screen name="Sueldos" component={SueldosScreen} />
+        <Drawer.Screen name="Inversiones" component={InversionesScreen} />
+      </Drawer.Navigator>
+    </NavigationContainer>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 50,
+    padding: 20,
+    paddingTop: 50,
+    backgroundColor: '#fff',
   },
-  dayContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 36,
-    height: 36,
-    margin: 2,
-    borderRadius: 4,
-  },
-  dayText: {
-    color: 'black',
-  },
-  disabledText: {
-    color: 'gray',
-  },
-  label: {
-    fontSize: 8,
-    color: 'red',
-    marginTop: 2,
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
+
